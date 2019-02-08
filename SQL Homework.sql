@@ -110,3 +110,57 @@ WHERE actor_id IN
    WHERE title = 'Alone Trip'
   )
 );
+
+#7c
+select customer.first_name, customer.last_name, customer.email, country.country
+from customer join address on customer.address_id=address.address_id
+join city on address.city_id=city.city_id
+join country on city.country_id=country.country_id
+where country.country="Canada";
+
+#7d
+select film.title, category.name
+from film join film_category on film.film_id=film_category.film_id
+join category on film_category.category_id=category.category_id
+where name='Family';
+
+#7e
+select film.title, count(rental.inventory_id) as Total_Rentals
+from film join inventory on film.film_id=inventory.film_id
+join rental on inventory.inventory_id=rental.inventory_id
+group by title order by Total_Rentals desc;
+
+#7f
+select store.store_id, sum(payment.amount)
+from store join staff on store.store_id=staff.store_id
+join payment on staff.staff_id=payment.staff_id
+group by store_id;
+
+#7g
+select store.store_id, city.city, country.country
+from store join address on store.address_id=address.address_id
+join city on address.city_id=city.city_id
+join country on city.country_id=country.country_id;
+
+#7h
+select category.name, sum(payment.amount) as Total
+from category join film_category on category.category_id=film_category.category_id
+join inventory on film_category.film_id=inventory.film_id
+join rental on inventory.inventory_id=rental.inventory_id
+join payment on rental.rental_id=payment_id
+group by name order by Total desc limit 5;
+
+#8a
+create view Top_Five_Genres as
+select category.name, sum(payment.amount) as Total
+from category join film_category on category.category_id=film_category.category_id
+join inventory on film_category.film_id=inventory.film_id
+join rental on inventory.inventory_id=rental.inventory_id
+join payment on rental.rental_id=payment_id
+group by name order by Total desc limit 5;
+
+#8b
+select * from Top_Five_Genres;
+
+#8c
+drop view Top_Five_Genres;
